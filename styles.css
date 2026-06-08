@@ -1,0 +1,688 @@
+:root {
+  --bg: #f6f7f4;
+  --ink: #18201b;
+  --muted: #69746e;
+  --line: #dfe5dc;
+  --panel: #ffffff;
+  --field: #f9faf7;
+  --green: #18824b;
+  --amber: #b86f00;
+  --red: #b33434;
+  --blue: #2068a8;
+  --teal: #168076;
+  --shadow: 0 12px 28px rgba(24, 32, 27, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  min-height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ink);
+  font-weight: 750;
+  cursor: pointer;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+h1 {
+  font-size: 1.35rem;
+  line-height: 1.1;
+}
+
+.app,
+#app {
+  min-height: 100vh;
+}
+
+#app {
+  padding: 14px 14px 96px;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: -14px -14px 12px;
+  padding: 14px;
+  background: rgba(246, 247, 244, 0.94);
+  border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(14px);
+}
+
+.eyebrow {
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.iconButton {
+  width: 46px;
+  height: 46px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  font-size: 1.5rem;
+}
+
+main {
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.offlineNotice {
+  max-width: 980px;
+  margin: 0 auto 12px;
+  padding: 10px 12px;
+  border: 1px solid #b9dec7;
+  border-radius: 8px;
+  background: #eef7f1;
+  color: #105d35;
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.stack {
+  display: grid;
+  gap: 12px;
+}
+
+.statHero,
+.metricGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.statHero > div,
+.metric,
+.statusCount,
+.searchPanel,
+.doorCard,
+.settingsPanel,
+.tutorialPanel,
+.tip,
+.empty {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+}
+
+.statHero > div {
+  padding: 16px;
+}
+
+.statHero strong {
+  display: block;
+  margin-top: 4px;
+  font-size: 2.25rem;
+  line-height: 1;
+}
+
+.statHero span,
+.metric span,
+.statusCount small,
+.cardFacts,
+.doorCard p,
+.timeline span,
+.timeline small {
+  color: var(--muted);
+}
+
+.metric {
+  padding: 14px;
+}
+
+.metric strong {
+  display: block;
+  margin-top: 6px;
+  font-size: 1.35rem;
+}
+
+.statusGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.statusCount {
+  min-height: 92px;
+  padding: 12px;
+  border-left-width: 5px;
+}
+
+.statusCount span {
+  font-weight: 900;
+}
+
+.statusCount strong {
+  display: block;
+  font-size: 1.8rem;
+  line-height: 1.1;
+}
+
+.searchPanel {
+  padding: 12px;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--field);
+  color: var(--ink);
+  padding: 10px 12px;
+}
+
+textarea {
+  resize: vertical;
+}
+
+label {
+  display: grid;
+  gap: 6px;
+  color: #334039;
+  font-size: 0.86rem;
+  font-weight: 800;
+}
+
+summary {
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  color: var(--muted);
+  font-weight: 850;
+  cursor: pointer;
+}
+
+.filterGrid {
+  display: grid;
+  gap: 8px;
+  padding-top: 6px;
+}
+
+.checkRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.checkRow input {
+  width: 20px;
+  min-height: 20px;
+}
+
+.sectionTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 2px;
+}
+
+.sectionTitle h2 {
+  flex: 1;
+  font-size: 1rem;
+}
+
+.sectionTitle b {
+  color: var(--muted);
+}
+
+.doorCard {
+  display: grid;
+  gap: 12px;
+  padding: 13px;
+}
+
+.cardHead {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.cardHead h3 {
+  font-size: 1.14rem;
+  line-height: 1.2;
+}
+
+.badge {
+  align-self: flex-start;
+  display: inline-flex;
+  white-space: nowrap;
+  border-radius: 999px;
+  padding: 7px 10px;
+  font-size: 0.78rem;
+  font-weight: 950;
+  border: 1px solid currentColor;
+}
+
+.mini {
+  display: inline-flex;
+  justify-content: center;
+  min-width: 34px;
+  border-radius: 999px;
+  padding: 4px 7px;
+  font-size: 0.72rem;
+  font-weight: 900;
+}
+
+.quickGrid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 6px;
+}
+
+.quick {
+  min-width: 0;
+  padding: 0;
+  color: #fff;
+  border: 0;
+}
+
+.actionRow,
+.cardTools {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.actionRow button,
+.cardTools button,
+.settingsPanel button,
+.tutorialPanel button,
+.fileButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 12px;
+}
+
+.actionRow button {
+  flex: 1 1 140px;
+  background: #eef7f1;
+  border-color: #b9dec7;
+  color: #105d35;
+}
+
+.cardFacts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  font-size: 0.82rem;
+}
+
+.notes {
+  padding: 10px;
+  background: #f8faf7;
+  border-radius: 8px;
+  color: #344139 !important;
+}
+
+.warning {
+  padding: 9px 10px;
+  border-radius: 8px;
+  background: #fff0d6;
+  color: #704300;
+  font-size: 0.86rem;
+  font-weight: 800;
+}
+
+.timeline {
+  border-top: 1px solid var(--line);
+  padding-top: 2px;
+}
+
+.timeline div {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 3px 8px;
+  align-items: center;
+  padding: 6px 0;
+}
+
+.timeline small {
+  grid-column: 2;
+}
+
+.cardTools {
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+}
+
+.danger {
+  color: var(--red);
+}
+
+.tabs {
+  position: fixed;
+  z-index: 10;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 4px;
+  padding: 8px 8px calc(8px + env(safe-area-inset-bottom));
+  background: rgba(255, 255, 255, 0.95);
+  border-top: 1px solid var(--line);
+  backdrop-filter: blur(16px);
+}
+
+.tab {
+  display: grid;
+  place-items: center;
+  min-height: 54px;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.76rem;
+}
+
+.tab.active {
+  background: #e8f3ed;
+  color: var(--green);
+}
+
+.fab {
+  position: fixed;
+  right: 14px;
+  bottom: 88px;
+  z-index: 11;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 16px;
+  min-height: 52px;
+  background: var(--green);
+  color: #fff;
+  border: 0;
+  box-shadow: 0 12px 30px rgba(24, 130, 75, 0.32);
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  align-items: flex-end;
+  background: rgba(14, 22, 17, 0.42);
+}
+
+.sheet {
+  width: 100%;
+  max-height: 92vh;
+  overflow: auto;
+  display: grid;
+  gap: 12px;
+  padding: 16px 14px calc(18px + env(safe-area-inset-bottom));
+  background: #fff;
+  border-radius: 8px 8px 0 0;
+}
+
+.sheetHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.twoCols {
+  display: grid;
+  grid-template-columns: minmax(92px, 0.45fr) 1fr;
+  gap: 10px;
+}
+
+.formGrid {
+  display: grid;
+  gap: 10px;
+}
+
+.statusPicker {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 7px;
+}
+
+.statusPicker button {
+  min-width: 0;
+  padding: 0 6px;
+}
+
+.statusPicker .selected,
+.answeredBox .selected {
+  color: #fff;
+  border-color: transparent;
+}
+
+.answeredBox {
+  display: grid;
+  grid-template-columns: 1fr 54px 54px 54px;
+  align-items: center;
+  gap: 7px;
+  padding: 9px;
+  border: 1px solid #b9dec7;
+  border-radius: 8px;
+  background: #eef7f1;
+  font-weight: 850;
+}
+
+.saveButton {
+  min-height: 52px;
+  background: var(--green);
+  color: #fff;
+  border: 0;
+}
+
+.settingsPanel {
+  display: grid;
+  gap: 9px;
+  padding: 12px;
+}
+
+.settingsPanel button,
+.tutorialPanel button,
+.fileButton {
+  min-height: 50px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  font-weight: 850;
+}
+
+.fileButton input {
+  display: none;
+}
+
+.tutorialPanel {
+  display: grid;
+  gap: 12px;
+  padding: 12px;
+}
+
+.tutorialPanel strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.tutorialPanel p {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.tutorialPanel button {
+  background: #eef7f1;
+  border-color: #b9dec7;
+  color: #105d35;
+}
+
+.tutorialSheet {
+  gap: 14px;
+}
+
+.tutorialSteps {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding-left: 22px;
+  color: #334039;
+}
+
+.tutorialSteps li::marker {
+  color: var(--green);
+  font-weight: 900;
+}
+
+.statusGuide {
+  display: grid;
+  gap: 8px;
+}
+
+.statusGuide div {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--field);
+}
+
+.statusGuide p {
+  color: #334039;
+  font-size: 0.9rem;
+}
+
+.tip {
+  padding: 12px;
+  color: var(--muted);
+  font-weight: 750;
+}
+
+.empty {
+  padding: 18px;
+  text-align: center;
+}
+
+.empty p {
+  margin-top: 5px;
+  color: var(--muted);
+}
+
+.hot {
+  background: var(--green);
+  color: #fff;
+  border-color: var(--green);
+}
+
+.warm {
+  background: var(--amber);
+  color: #fff;
+  border-color: var(--amber);
+}
+
+.closed {
+  background: var(--red);
+  color: #fff;
+  border-color: var(--red);
+}
+
+.d1 {
+  background: var(--blue);
+  color: #fff;
+  border-color: var(--blue);
+}
+
+.d2 {
+  background: var(--teal);
+  color: #fff;
+  border-color: var(--teal);
+}
+
+.d3 {
+  background: #49545f;
+  color: #fff;
+  border-color: #49545f;
+}
+
+.booked {
+  background: #6d4db3;
+  color: #fff;
+  border-color: #6d4db3;
+}
+
+.completed {
+  background: #2f6c39;
+  color: #fff;
+  border-color: #2f6c39;
+}
+
+@media (min-width: 720px) {
+  #app {
+    padding: 18px 18px 108px;
+  }
+
+  .topbar {
+    margin: -18px -18px 16px;
+    padding: 16px calc((100vw - 980px) / 2 + 18px);
+  }
+
+  .statusGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .filterGrid,
+  .settingsPanel,
+  .formGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .sheet {
+    max-width: 560px;
+    margin: auto auto 0;
+  }
+
+  .tabs {
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 620px;
+    border: 1px solid var(--line);
+    border-bottom: 0;
+    border-radius: 8px 8px 0 0;
+  }
+}

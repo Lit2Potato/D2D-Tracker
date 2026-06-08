@@ -1,0 +1,18 @@
+{
+  "name": "Door Knock Tracker",
+  "short_name": "Door Tracker",
+  "description": "A mobile-first local door-knocking tracker for field sales and service follow-ups.",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "background_color": "#f6f7f4",
+  "theme_color": "#18824b",
+  "icons": [
+    {
+      "src": "assets/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
