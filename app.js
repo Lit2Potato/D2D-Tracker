@@ -45,6 +45,7 @@ const emptyDoor = {
   homeowner: '',
   phone: '',
   service: 'Lawn mowing (no bag)',
+  services: [],
   recurringSchedule: 'Unsure',
   transportMethod: 'Unsure',
   priceQuoted: '',
@@ -55,18 +56,45 @@ const emptyDoor = {
   history: [],
 };
 
+function normalizeServices(door = {}) {
+  if (Array.isArray(door.services)) return door.services.map((service) => String(service).trim()).filter(Boolean);
+  if (typeof door.services === 'string' && door.services.trim()) return splitServices(door.services);
+  if (typeof door.service === 'string' && door.service.trim()) return splitServices(door.service);
+  if (typeof door.serviceInterestedIn === 'string' && door.serviceInterestedIn.trim()) return splitServices(door.serviceInterestedIn);
+  return [];
+}
+
 function normalizeDoor(door = {}) {
+  const selectedServices = normalizeServices(door);
   return {
     ...emptyDoor,
     ...door,
+    service: selectedServices[0] || door.service || '',
+    services: selectedServices,
     recurringSchedule: recurringSchedules.includes(door?.recurringSchedule) ? door.recurringSchedule : 'Unsure',
     transportMethod: transportMethods.includes(door?.transportMethod) ? door.transportMethod : 'Unsure',
     history: Array.isArray(door?.history) ? door.history : [],
   };
 }
 
+function splitServices(value) {
+  return String(value || '')
+    .split(';')
+    .map((service) => service.trim())
+    .filter(Boolean);
+}
+
+function joinServices(value) {
+  return normalizeServices({ services: value }).join('; ');
+}
+
+function displayServices(door) {
+  return normalizeServices(door).join(', ') || 'No service selected';
+}
+
 function serviceOptionsFor(value) {
-  return value && !services.includes(value) ? [value, ...services] : services;
+  const selected = normalizeServices({ services: value });
+  return [...selected.filter((service) => !services.includes(service)), ...services];
 }
 
 const savedDoors = loadDoors();
@@ -132,6 +160,7 @@ function addDemoData() {
       homeowner: 'Sam',
       phone: '555-0142',
       service: 'Interlock resanding',
+      services: ['Interlock resanding'],
       recurringSchedule: 'One-off',
       transportMethod: 'Car',
       priceQuoted: '450',
@@ -148,6 +177,7 @@ function addDemoData() {
       street: 'Maple Ave',
       status: 'D2',
       service: 'Lawn mowing (no bag)',
+      services: ['Lawn mowing (no bag)'],
       recurringSchedule: 'Weekly',
       transportMethod: 'Walking',
       lastKnocked: nowIso(),
@@ -163,6 +193,7 @@ function addDemoData() {
       status: 'Booked',
       homeowner: 'Priya',
       service: 'Window cleaning',
+      services: ['Window cleaning'],
       recurringSchedule: 'Monthly',
       transportMethod: 'Biking',
       priceQuoted: '180',
@@ -200,12 +231,13 @@ function stats() {
 function filteredDoors() {
   const query = filters.query.toLowerCase().trim();
   return doors.filter((door) => {
-    const haystack = [door.addressNumber, door.street, door.unit, door.homeowner, door.phone, door.service, door.recurringSchedule, door.transportMethod, door.notes].join(' ').toLowerCase();
+    const doorServices = normalizeServices(door);
+    const haystack = [door.addressNumber, door.street, door.unit, door.homeowner, door.phone, doorServices.join(' '), door.recurringSchedule, door.transportMethod, door.notes].join(' ').toLowerCase();
     return (
       (!query || haystack.includes(query)) &&
       (!filters.street || door.street.toLowerCase().includes(filters.street.toLowerCase())) &&
       (!filters.status || door.status === filters.status) &&
-      (!filters.service || door.service === filters.service) &&
+      (!filters.service || doorServices.includes(filters.service)) &&
       (!filters.recurringSchedule || door.recurringSchedule === filters.recurringSchedule) &&
       (!filters.transportMethod || door.transportMethod === filters.transportMethod) &&
       (!filters.followUp || door.nextFollowUp === filters.followUp) &&
@@ -296,7 +328,7 @@ function doorsHtml() {
             </select>
             <select data-filter="service">
               <option value="">Any service</option>
-              ${serviceOptionsFor(filters.service).map((service) => `<option ${filters.service === service ? 'selected' : ''}>${service}</option>`).join('')}
+              ${serviceOptionsFor(filters.service).map((service) => `<option value="${escapeHtml(service)}" ${filters.service === service ? 'selected' : ''}>${escapeHtml(service)}</option>`).join('')}
             </select>
             <select data-filter="recurringSchedule">
               <option value="">Any recurring</option>
@@ -342,7 +374,7 @@ function doorCardHtml(door) {
       <div class="cardHead">
         <div>
           <h3>${escapeHtml(door.addressNumber)} ${escapeHtml(door.street)}</h3>
-          <p>${escapeHtml([door.unit, door.homeowner, door.service].filter(Boolean).join(' - '))}</p>
+          <p>${escapeHtml([door.unit, door.homeowner, displayServices(door)].filter(Boolean).join(' - '))}</p>
         </div>
         ${badge(door.status)}
       </div>
@@ -451,7 +483,13 @@ function formHtml(door) {
           ${field('Name', 'homeowner', door.homeowner)}
           ${field('Phone', 'phone', door.phone, 'tel')}
         </div>
-        <label>Service<select name="service">${serviceOptionsFor(door.service).map((service) => `<option ${door.service === service ? 'selected' : ''}>${service}</option>`).join('')}</select></label>
+        <fieldset class="servicePicker">
+          <legend>Services</legend>
+          ${serviceOptionsFor(door.services).map((service) => {
+            const checked = normalizeServices(door).includes(service) ? 'checked' : '';
+            return `<label class="serviceChip"><input type="checkbox" name="services" value="${escapeHtml(service)}" ${checked}> <span>${escapeHtml(service)}</span></label>`;
+          }).join('')}
+        </fieldset>
         <div class="formGrid">
           <label>Recurring Schedule<select name="recurringSchedule">${recurringSchedules.map((schedule) => `<option ${door.recurringSchedule === schedule ? 'selected' : ''}>${schedule}</option>`).join('')}</select></label>
           <label>Transport Method<select name="transportMethod">${transportMethods.map((method) => `<option ${door.transportMethod === method ? 'selected' : ''}>${method}</option>`).join('')}</select></label>
@@ -479,6 +517,7 @@ function closeForm() {
 
 function saveForm(form) {
   const data = Object.fromEntries(new FormData(form).entries());
+  const selectedServices = Array.from(form.querySelectorAll('input[name="services"]:checked')).map((input) => input.value);
   const existing = editingId ? doors.find((door) => door.id === editingId) : null;
   const statusChanged = !existing || existing.status !== data.status;
   const saved = {
@@ -486,6 +525,8 @@ function saveForm(form) {
     ...existing,
     ...data,
     id: editingId || crypto.randomUUID(),
+    service: selectedServices[0] || '',
+    services: selectedServices,
     lastKnocked: statusChanged ? nowIso() : existing?.lastKnocked || nowIso(),
     history: statusChanged ? [...(existing?.history || []), historyItem(data.status, editingId ? 'Status updated' : 'Added door')] : existing?.history || [],
   };
@@ -512,8 +553,13 @@ function noAnswerAgain(id) {
 }
 
 function exportCsv() {
-  const headers = ['id', 'addressNumber', 'street', 'unit', 'status', 'homeowner', 'phone', 'service', 'recurringSchedule', 'transportMethod', 'priceQuoted', 'estimatedValue', 'lastKnocked', 'nextFollowUp', 'notes', 'history'];
-  const rows = doors.map((door) => headers.map((key) => csvEscape(key === 'history' ? JSON.stringify(door.history || []) : door[key])).join(','));
+  const headers = ['id', 'addressNumber', 'street', 'unit', 'status', 'homeowner', 'phone', 'service', 'services', 'recurringSchedule', 'transportMethod', 'priceQuoted', 'estimatedValue', 'lastKnocked', 'nextFollowUp', 'notes', 'history'];
+  const rows = doors.map((door) => headers.map((key) => {
+    if (key === 'history') return csvEscape(JSON.stringify(door.history || []));
+    if (key === 'service') return csvEscape(normalizeServices(door)[0] || '');
+    if (key === 'services') return csvEscape(joinServices(door.services));
+    return csvEscape(door[key]);
+  }).join(','));
   const blob = new Blob([[headers.join(','), ...rows].join('\n')], { type: 'text/csv' });
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
@@ -567,11 +613,14 @@ function normalizeImportedDoor(data) {
     history = [];
   }
   const status = statuses.includes(data.status) ? data.status : 'D1';
+  const importedServices = data.services ? splitServices(data.services) : normalizeServices(data);
   return normalizeDoor({
     ...emptyDoor,
     ...data,
     id: data.id || crypto.randomUUID(),
     status,
+    service: importedServices[0] || data.service || '',
+    services: importedServices,
     history: history.length ? history : [historyItem(status, 'Imported')],
   });
 }

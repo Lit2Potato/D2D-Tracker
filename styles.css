@@ -478,6 +478,45 @@ summary {
   gap: 7px;
 }
 
+.servicePicker {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.servicePicker legend {
+  margin-bottom: 2px;
+  color: #334039;
+  font-size: 0.86rem;
+  font-weight: 800;
+}
+
+.serviceChip {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 48px;
+  padding: 9px 11px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--field);
+  color: var(--ink);
+  font-size: 0.92rem;
+}
+
+.serviceChip input {
+  width: 20px;
+  min-height: 20px;
+  accent-color: var(--green);
+}
+
+.serviceChip span {
+  font-weight: 850;
+}
+
 .statusPicker button {
   min-width: 0;
   padding: 0 6px;
@@ -668,7 +707,8 @@ summary {
 
   .filterGrid,
   .settingsPanel,
-  .formGrid {
+  .formGrid,
+  .servicePicker {
     grid-template-columns: repeat(2, 1fr);
   }
 
